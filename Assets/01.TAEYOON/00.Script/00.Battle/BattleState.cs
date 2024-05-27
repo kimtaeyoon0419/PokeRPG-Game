@@ -1,3 +1,5 @@
+namespace PokeRPG.Battle
+{
     public enum BattleState
     {
         SelectTurn,
@@ -6,3 +8,4 @@
         Won,
         Lose
     }
+}
