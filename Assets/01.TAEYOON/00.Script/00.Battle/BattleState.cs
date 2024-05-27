@@ -3,4 +3,6 @@
         SelectTurn,
         MyTurn,
         EnemyTurn,
+        Won,
+        Lose
     }
