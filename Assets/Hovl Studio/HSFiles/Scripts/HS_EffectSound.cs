@@ -27,6 +27,10 @@ public class HS_EffectSound : MonoBehaviour
         {
             InvokeRepeating("RepeatSound", StartTime, RepeatTime);
         }
+        else
+        {
+            soundComponent.PlayOneShot(clip);
+        }
     }
 
     void RepeatSound()

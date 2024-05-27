@@ -821,7 +821,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4264832448384411484}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 5, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -870,9 +870,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: "\uC2A4\uCF5C\uD53C"
   unitLevel: 15
-  damage: 2
+  damage: 10000
   maxHP: 200
   currentHP: 200
+  tonadoEffect: {fileID: 1414779434264708, guid: 9747e55cc13229f45bfee75afeaa540c, type: 3}
 --- !u!1 &4862862629973180369
 GameObject:
   m_ObjectHideFlags: 0
