@@ -22,15 +22,31 @@ namespace PokeRPG.Battle
         public Transform playerBattleStation; // 플레이어 몬스터 스폰위치
         public Transform enemyBattleStation; // 상대방 몬스터 스폰위치
 
-        private UnitProfile playerUnit; // 플레이어 몬스터의 UnitProfile 코드
-        private UnitProfile enemyUnit; // 상대방 몬스터의 UnitProfile 코드
+        public UnitProfile playerUnit { get; private set; }// 플레이어 몬스터의 UnitProfile 코드
+        public UnitProfile enemyUnit { get; private set; }// 상대방 몬스터의 UnitProfile 코드
 
-        [Header("Turn")]
-        [SerializeField] BattleState curBattleState; // 현재 배틀 턴
+        public BattleState curBattleState { get; private set; } // 현재 배틀 턴
 
         [Header("UI")]
         public Text text; // 배틀 상황을 알려줄 텍스트
         public GameObject skillButton1; // 스킬 버튼
+        public GameObject playerMonsterStatBoxObject;
+        public GameObject enemyMonsterStatBoxObject;
+        private MonsterStatBox playerMonsterStatBox;
+        private MonsterStatBox enemyMonsterStatBox;
+
+        private void Awake()
+        {
+            if(instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
 
         private void Start()
         {
@@ -47,6 +63,8 @@ namespace PokeRPG.Battle
             GameObject enemyGo = Instantiate(enemyMonster, enemyBattleStation.position, Quaternion.identity); // 상대방 몬스터 스폰
             enemyGo.transform.rotation = Quaternion.Euler(0, -90, 0); // 서로 바라보기
             enemyUnit = enemyGo.GetComponent<UnitProfile>(); // 상대방 몬스터의 값 가져오기
+
+            playerMonsterStatBox = playerMonsterStatBoxObject.GetComponent<MonsterStatBox>(); // 플레이어 몬스터 스텟박스 가져오기
 
             text.text = "야생의 " + enemyUnit.unitName + "이(가) 나타났다!";
 
@@ -91,6 +109,7 @@ namespace PokeRPG.Battle
             bool isDead = playerUnit.TakeDamage(enemyUnit.damage); // 플레이어에게 공격하고 죽었는지 확인
             yield return new WaitForSeconds(0.5f); // 대기
             text.text = "공격이 적중했다!";
+            playerMonsterStatBox.SetStatBox();
 
             yield return new WaitForSeconds(2f); // 대기
 
