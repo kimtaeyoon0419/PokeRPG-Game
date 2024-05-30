@@ -5268,9 +5268,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: "\uCE90\uB9AC\uAC74"
   unitLevel: 10
-  damage: 5
+  damage: 20
   maxHP: 100
   currentHP: 100
+  maxExp: 0
+  curExp: 0
+  speed: 10
   tonadoEffect: {fileID: 1729166761864512, guid: b7720d9fd46dcc24ca97e7daf4cabf10, type: 3}
 --- !u!1 &3025040867921151961
 GameObject:

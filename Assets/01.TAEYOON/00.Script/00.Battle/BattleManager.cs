@@ -30,10 +30,8 @@ namespace PokeRPG.Battle
         [Header("UI")]
         public Text text; // 배틀 상황을 알려줄 텍스트
         public GameObject skillButton1; // 스킬 버튼
-        public GameObject playerMonsterStatBoxObject;
-        public GameObject enemyMonsterStatBoxObject;
-        private MonsterStatBox playerMonsterStatBox;
-        private MonsterStatBox enemyMonsterStatBox;
+        public GameObject playerMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 플레이어 )
+        public GameObject enemyMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 상대 )
 
         private void Awake()
         {
@@ -64,14 +62,19 @@ namespace PokeRPG.Battle
             enemyGo.transform.rotation = Quaternion.Euler(0, -90, 0); // 서로 바라보기
             enemyUnit = enemyGo.GetComponent<UnitProfile>(); // 상대방 몬스터의 값 가져오기
 
-            playerMonsterStatBox = playerMonsterStatBoxObject.GetComponent<MonsterStatBox>(); // 플레이어 몬스터 스텟박스 가져오기
-
             text.text = "야생의 " + enemyUnit.unitName + "이(가) 나타났다!";
 
             yield return new WaitForSeconds(2f); // 대기
 
-            curBattleState = BattleState.MyTurn; // 플레이어 턴으로 교체
-            PlayerTurn(); // 플레이어 턴 실행
+            if (playerUnit.speed > enemyUnit.speed)
+            {
+                curBattleState = BattleState.MyTurn; // 플레이어 턴으로 교체
+                PlayerTurn(); // 플레이어 턴 실행
+            }
+            else
+            {
+                StartCoroutine(EnemyTurn());
+            }
         }
 
         IEnumerator PlayerAttack() // 플레이어의 공격
@@ -101,7 +104,7 @@ namespace PokeRPG.Battle
 
         IEnumerator EnemyTurn() // 상대방의 공격
         {
-            yield return new WaitForSeconds(1f); // 대기
+            //yield return new WaitForSeconds(1f); // 대기
 
             text.text = enemyUnit.unitName + "의 공격!";
             enemyUnit.PlayAttackAnim(); // 상대방 몬스터의 공격 애니메이션 실행

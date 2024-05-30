@@ -22,22 +22,13 @@ namespace PokeRPG.Battle.UI
         public WhoMonster whomonster;
         private float lerpspeed = 0.01f;
 
-        private void Start()
+
+        private void Update()
         {
             SetStatBox();
         }
 
-        private void Update()
-        {
-            SeeDamage();
-        }
-
-        public void SetStatBox()
-        {
-            StartCoroutine(Co_SetStatBox());
-        }
-
-        private void SeeDamage()
+        private void SetStatBox()
         {
             if (whomonster == WhoMonster.myMoster)
             {
@@ -55,22 +46,10 @@ namespace PokeRPG.Battle.UI
             }
         }
 
-        private IEnumerator Co_SetStatBox()
+        private void LevelUp()
         {
-            yield return null;
-            if (whomonster == WhoMonster.myMoster)
-            {
-                monsterName.text = BattleManager.instance.playerUnit.unitName; // 이름 초기화 
-                monsterHP.text = BattleManager.instance.playerUnit.currentHP.ToString() + " / " + BattleManager.instance.playerUnit.maxHP.ToString(); // 체력 초기화
-                monsterLevel.text = "Lv" + BattleManager.instance.playerUnit.unitLevel.ToString(); // 레벨 초기화
-                monsterExpbar.value = BattleManager.instance.playerUnit.maxExp; // 경험치바 초기화
-                fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
-            }
-            else
-            {
-                monsterName.text = BattleManager.instance.playerUnit.unitName; // 이름 초기화 
-                fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
-            }
+            monsterLevel.text = "Lv" + BattleManager.instance.playerUnit.unitLevel.ToString(); // 레벨 초기화
+            monsterExpbar.value = BattleManager.instance.playerUnit.maxExp; // 경험치바 초기화
         }
     }
 }

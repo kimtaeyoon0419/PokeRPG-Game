@@ -20,6 +20,7 @@ namespace PokeRPG.Battle.Unit
         public int currentHP;
         public int maxExp;
         public int curExp;
+        public int speed;
 
         [Header("SkillEffect")]
         public GameObject tonadoEffect;

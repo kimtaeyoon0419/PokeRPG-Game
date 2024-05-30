@@ -24441,6 +24441,7 @@ GameObject:
   - component: {fileID: 199655041276217420}
   - component: {fileID: -575395535636857004}
   - component: {fileID: 1226144972590878710}
+  - component: {fileID: -6022157794340703649}
   m_Layer: 0
   m_Name: Tornado loop
   m_TagString: Untagged
@@ -29460,6 +29461,19 @@ MonoBehaviour:
   RandomVolume: 0
   minVolume: 0.4
   maxVolume: 1
+--- !u!114 &-6022157794340703649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729166761864512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6edb32a766f5e014bb3dba8e1dc6f89e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 2
 --- !u!1 &1787669143739076
 GameObject:
   m_ObjectHideFlags: 0
