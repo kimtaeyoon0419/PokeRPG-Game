@@ -55,7 +55,9 @@ namespace PokeRPG.Battle.UI
             }
             else
             {
-
+                monsterName.text = BattleManager.instance.playerUnit.unitName; // 이름 초기화 
+                monsterHP.text = BattleManager.instance.playerUnit.currentHP.ToString() + " / " + BattleManager.instance.enemyUnit.maxHP.ToString(); // 체력 초기화
+                fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
             }
         }
     }
