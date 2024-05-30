@@ -39,7 +39,20 @@ namespace PokeRPG.Battle.UI
 
         private void SeeDamage()
         {
-            monsterHPbar.value = Mathf.Lerp(monsterHPbar.value, (float)BattleManager.instance.playerUnit.currentHP / BattleManager.instance.playerUnit.maxHP, lerpspeed); // 피해량 보이게 하기
+            if (whomonster == WhoMonster.myMoster)
+            {
+                monsterHP.text = BattleManager.instance.playerUnit.currentHP.ToString() + " / " + BattleManager.instance.playerUnit.maxHP.ToString(); // 체력 초기화 ( 텍스트 )
+
+                monsterHPbar.value = Mathf.Lerp(monsterHPbar.value, (float)BattleManager.instance.playerUnit.currentHP / BattleManager.instance.playerUnit.maxHP, lerpspeed); // 체력바 초기화
+
+                fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
+            }
+            else
+            {
+                monsterHPbar.value = Mathf.Lerp(monsterHPbar.value, (float)BattleManager.instance.enemyUnit.currentHP / BattleManager.instance.enemyUnit.maxHP, lerpspeed); // 체력바 초기화
+
+                fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
+            }
         }
 
         private IEnumerator Co_SetStatBox()
@@ -56,7 +69,6 @@ namespace PokeRPG.Battle.UI
             else
             {
                 monsterName.text = BattleManager.instance.playerUnit.unitName; // 이름 초기화 
-                monsterHP.text = BattleManager.instance.playerUnit.currentHP.ToString() + " / " + BattleManager.instance.enemyUnit.maxHP.ToString(); // 체력 초기화
                 fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
             }
         }

@@ -109,7 +109,7 @@ namespace PokeRPG.Battle
             bool isDead = playerUnit.TakeDamage(enemyUnit.damage); // 플레이어에게 공격하고 죽었는지 확인
             yield return new WaitForSeconds(0.5f); // 대기
             text.text = "공격이 적중했다!";
-            playerMonsterStatBox.SetStatBox();
+            //playerMonsterStatBox.SetStatBox();
 
             yield return new WaitForSeconds(2f); // 대기
 
