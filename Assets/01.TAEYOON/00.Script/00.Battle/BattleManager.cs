@@ -11,6 +11,7 @@ namespace PokeRPG.Battle
     // # Unity
     using UnityEngine;
     using UnityEngine.UI;
+    using TMPro;
 
     public class BattleManager : MonoBehaviour
     {
@@ -28,8 +29,11 @@ namespace PokeRPG.Battle
         public BattleState curBattleState { get; private set; } // 현재 배틀 턴
 
         [Header("UI")]
-        public Text text; // 배틀 상황을 알려줄 텍스트
+        public TextMeshProUGUI text;
         public GameObject skillButton1; // 스킬 버튼
+        public GameObject skillButton2; // 스킬 버튼
+        public GameObject skillButton3; // 스킬 버튼
+        public GameObject skillButton4; // 스킬 버튼
         public GameObject playerMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 플레이어 )
         public GameObject enemyMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 상대 )
 
@@ -51,6 +55,9 @@ namespace PokeRPG.Battle
             curBattleState = BattleState.SelectTurn; // 현재 배틀턴을 행동 선택턴으로 설정
             StartCoroutine(SetupBattle()); // 턴 기본설정 
             skillButton1.SetActive(false); // 스킬 버튼 비활성화
+            skillButton2.SetActive(false); // 스킬 버튼 비활성화
+            skillButton3.SetActive(false); // 스킬 버튼 비활성화
+            skillButton4.SetActive(false); // 스킬 버튼 비활성화
         }
 
         IEnumerator SetupBattle()
@@ -59,7 +66,7 @@ namespace PokeRPG.Battle
             playerGo.transform.rotation = Quaternion.Euler(0, 90, 0); // 서로 바라보기
             playerUnit = playerGo.GetComponent<UnitProfile>(); // 플레이어 몬스터의 값 가져오기
             GameObject enemyGo = Instantiate(enemyMonster, enemyBattleStation.position, Quaternion.identity); // 상대방 몬스터 스폰
-            enemyGo.transform.rotation = Quaternion.Euler(0, -90, 0); // 서로 바라보기
+            enemyGo.transform.rotation = Quaternion.Euler(0, -81, 0); // 서로 바라보기
             enemyUnit = enemyGo.GetComponent<UnitProfile>(); // 상대방 몬스터의 값 가져오기
 
             text.text = "야생의 " + enemyUnit.unitName + "이(가) 나타났다!";
@@ -148,6 +155,9 @@ namespace PokeRPG.Battle
         {
             text.text = "행동을 선택하세요!";
             skillButton1.SetActive(true); // 스킬 버튼 활성화
+            skillButton2.SetActive(true); // 스킬 버튼 활성화
+            skillButton3.SetActive(true); // 스킬 버튼 활성화
+            skillButton4.SetActive(true); // 스킬 버튼 활성화
         }
 
 
@@ -157,6 +167,9 @@ namespace PokeRPG.Battle
                 return;
 
             skillButton1.SetActive (false); // 스킬 버튼 비활성화
+            skillButton2.SetActive (false); // 스킬 버튼 비활성화
+            skillButton3.SetActive (false); // 스킬 버튼 비활성화
+            skillButton4.SetActive (false); // 스킬 버튼 비활성화
             StartCoroutine(PlayerAttack()); // 플레이어 몬스터의 공격 코루틴 실행
         }
     }

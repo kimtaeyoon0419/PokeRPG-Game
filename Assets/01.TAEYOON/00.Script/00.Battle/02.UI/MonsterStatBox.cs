@@ -7,13 +7,14 @@ namespace PokeRPG.Battle.UI
     // # Unity
     using UnityEngine;
     using UnityEngine.UI;
+    using TMPro;
 
     public class MonsterStatBox : MonoBehaviour
     {
         [Header("UI")]
-        public Text monsterName; // 몬스터의 이름
-        public Text monsterHP; // 몬스터의 체력 텍스트
-        public Text monsterLevel; // 몬스터의 레벨 텍스트
+        public TextMeshProUGUI monsterName; // 몬스터의 이름
+        public TextMeshProUGUI monsterHP; // 몬스터의 체력 텍스트
+        public TextMeshProUGUI monsterLevel; // 몬스터의 레벨 텍스트
         public Slider monsterHPbar; // 몬스터의 체력바
         public Slider easeHpBar;
         public Slider monsterExpbar; // 몬스터의 경험치바
@@ -21,7 +22,6 @@ namespace PokeRPG.Battle.UI
         public Image fill; // 슬라이더 바 이미지
         public WhoMonster whomonster;
         private float lerpspeed = 0.01f;
-
 
         private void Update()
         {
@@ -32,14 +32,22 @@ namespace PokeRPG.Battle.UI
         {
             if (whomonster == WhoMonster.myMoster)
             {
+                monsterName.text = BattleManager.instance.playerUnit.unitName;
+
                 monsterHP.text = BattleManager.instance.playerUnit.currentHP.ToString() + " / " + BattleManager.instance.playerUnit.maxHP.ToString(); // 체력 초기화 ( 텍스트 )
 
+                monsterLevel.text = "Lv." + BattleManager.instance.playerUnit.unitLevel.ToString();
+
                 monsterHPbar.value = Mathf.Lerp(monsterHPbar.value, (float)BattleManager.instance.playerUnit.currentHP / BattleManager.instance.playerUnit.maxHP, lerpspeed); // 체력바 초기화
+
+                monsterExpbar.value = Mathf.Lerp(monsterExpbar.value, (float)BattleManager.instance.playerUnit.curExp / BattleManager.instance.playerUnit.maxExp, lerpspeed); // 경험치바 초기화
 
                 fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
             }
             else
             {
+                monsterName.text = BattleManager.instance.enemyUnit.unitName;
+
                 monsterHPbar.value = Mathf.Lerp(monsterHPbar.value, (float)BattleManager.instance.enemyUnit.currentHP / BattleManager.instance.enemyUnit.maxHP, lerpspeed); // 체력바 초기화
 
                 fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
