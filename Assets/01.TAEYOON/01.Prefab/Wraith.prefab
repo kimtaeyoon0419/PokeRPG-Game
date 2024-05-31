@@ -5271,10 +5271,24 @@ MonoBehaviour:
   damage: 20
   maxHP: 100
   currentHP: 100
-  maxExp: 10
+  maxExp: 100
   curExp: 3
   speed: 10
+  exp: 0
   tonadoEffect: {fileID: 1729166761864512, guid: b7720d9fd46dcc24ca97e7daf4cabf10, type: 3}
+  skillList:
+  - skillName: Tonado
+    skillEffet: {fileID: 1729166761864512, guid: b7720d9fd46dcc24ca97e7daf4cabf10, type: 3}
+    skillDamage: 10
+  - skillName: Explosion
+    skillEffet: {fileID: 1414779434264708, guid: 9747e55cc13229f45bfee75afeaa540c, type: 3}
+    skillDamage: 50
+  - skillName: Lightning bolt
+    skillEffet: {fileID: 1312838344612490, guid: 268294f28a34a3446bdde40b6e6559b5, type: 3}
+    skillDamage: 70
+  - skillName: Water
+    skillEffet: {fileID: 1579001845974998, guid: 86fc13c4ba74e9143b8ca9de76de7768, type: 3}
+    skillDamage: 200
 --- !u!1 &3025040867921151961
 GameObject:
   m_ObjectHideFlags: 0

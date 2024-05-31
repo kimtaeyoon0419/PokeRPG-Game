@@ -7,6 +7,17 @@ namespace PokeRPG.Battle.Unit
     // # Unity
     using UnityEngine;
 
+    [System.Serializable]
+    public class SkillList
+    {
+        public string skillName;
+
+        public GameObject skillEffet;
+
+        public int skillDamage;
+    }
+
+
     public class UnitProfile : MonoBehaviour
     {
         [Header("Animator")]
@@ -21,9 +32,11 @@ namespace PokeRPG.Battle.Unit
         public int maxExp;
         public int curExp;
         public int speed;
+        public int exp;
 
         [Header("SkillEffect")]
         public GameObject tonadoEffect;
+        public List<SkillList> skillList;
 
         private readonly int hashAttack = Animator.StringToHash("Attack");
         private readonly int hashTakeDamage = Animator.StringToHash("TakeDamage");
@@ -55,6 +68,19 @@ namespace PokeRPG.Battle.Unit
         public void EnemyPosSkillAttack(Transform skillpos)
         {
             Instantiate(tonadoEffect, skillpos.position, Quaternion.identity);
+        }
+
+        public void UseSkill(string skillName)
+        {
+            foreach (var skill in skillList)
+            {
+                if(skill.skillName == skillName)
+                {
+                    damage = skill.skillDamage;
+                    Instantiate(skill.skillEffet, BattleManager.instance.enemyBattleStation.position, Quaternion.identity);
+                    break;
+                }
+            }
         }
     }
 }
