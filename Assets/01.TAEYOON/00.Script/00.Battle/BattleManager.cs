@@ -88,7 +88,7 @@ namespace PokeRPG.Battle
         {
             text.text = playerUnit.unitName + "의 공격!";
             playerUnit.PlayAttackAnim(); // 플레이어 몬스터의 공격 애니메이션 실행
-            playerUnit.EnemyPosSkillAttack(enemyBattleStation); // 스킬 이펙트 소환
+            //playerUnit.EnemyPosSkillAttack(enemyBattleStation); // 스킬 이펙트 소환
             bool isDead = enemyUnit.TakeDamage(playerUnit.damage); // 상대 몬스터에게 공격하고 죽었는지 확인
             curBattleState = BattleState.EnemyTurn; // 상대방 턴으로 교체
             yield return new WaitForSeconds(0.5f); // 대기
@@ -101,6 +101,7 @@ namespace PokeRPG.Battle
             if (isDead) // 만약 상대 몬스터가 죽었다면
             {
                 curBattleState = BattleState.Won; // 플레이어 승리 
+                playerUnit.curExp += enemyUnit.exp;
                 EndBattle(); // 배틀 종료
             }
             else // 안죽었다면
@@ -161,7 +162,7 @@ namespace PokeRPG.Battle
         }
 
 
-        public void OnAttackButton() // 버튼 클릭했을 때 실행할 함수
+        public void OnAttackButton(string skillName) // 버튼 클릭했을 때 실행할 함수
         {
             if (curBattleState != BattleState.MyTurn) // 플레이어 턴이 아니라면 그냥 리턴
                 return;
@@ -170,6 +171,7 @@ namespace PokeRPG.Battle
             skillButton2.SetActive (false); // 스킬 버튼 비활성화
             skillButton3.SetActive (false); // 스킬 버튼 비활성화
             skillButton4.SetActive (false); // 스킬 버튼 비활성화
+            playerUnit.UseSkill(skillName);
             StartCoroutine(PlayerAttack()); // 플레이어 몬스터의 공격 코루틴 실행
         }
     }
