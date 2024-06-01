@@ -32,7 +32,10 @@ namespace PokeRPG.Battle.Unit
         public int maxExp;
         public int curExp;
         public int speed;
-        public int exp;
+        public int xpReward;
+        public int evolutionLevel = 15;
+
+
 
         [Header("SkillEffect")]
         public GameObject tonadoEffect;
@@ -45,6 +48,28 @@ namespace PokeRPG.Battle.Unit
         private void Awake()
         {
             animator = GetComponent<Animator>();
+        }
+
+        public IEnumerator LevelUp(int exp)
+        {
+            int overflowXP;
+            curExp += exp;
+
+            while (curExp >= maxExp)
+            {
+                yield return new WaitForSeconds(0.5f);
+                overflowXP = curExp - maxExp;
+                curExp = 0;
+                unitLevel++;
+                BattleManager.instance.LevelUpText();
+                curExp += overflowXP;
+            }
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        public void Evolution()
+        {
+
         }
 
         public bool TakeDamage(int dmg)
@@ -74,7 +99,7 @@ namespace PokeRPG.Battle.Unit
         {
             foreach (var skill in skillList)
             {
-                if(skill.skillName == skillName)
+                if (skill.skillName == skillName)
                 {
                     damage = skill.skillDamage;
                     Instantiate(skill.skillEffet, BattleManager.instance.enemyBattleStation.position, Quaternion.identity);

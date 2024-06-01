@@ -5271,10 +5271,10 @@ MonoBehaviour:
   damage: 20
   maxHP: 100
   currentHP: 100
-  maxExp: 100
+  maxExp: 20
   curExp: 3
   speed: 10
-  exp: 0
+  xpReward: 0
   tonadoEffect: {fileID: 1729166761864512, guid: b7720d9fd46dcc24ca97e7daf4cabf10, type: 3}
   skillList:
   - skillName: Tonado

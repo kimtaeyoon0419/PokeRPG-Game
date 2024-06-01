@@ -1,24 +1,27 @@
-// # System
-using System.Collections;
-using System.Collections.Generic;
-
-// # Unity
-using UnityEngine;
-
-public class DestorySkill : MonoBehaviour
+namespace PokeRPG.Battle.Skill
 {
-    public float delay;
-    private WaitForSeconds waitForSeconds;
+    // # System
+    using System.Collections;
+    using System.Collections.Generic;
 
-    private void Start()
-    {
-        waitForSeconds = new WaitForSeconds(delay);
-        StartCoroutine(Co_delete());
-    }
+    // # Unity
+    using UnityEngine;
 
-    IEnumerator Co_delete()
+    public class DestorySkill : MonoBehaviour
     {
-        yield return waitForSeconds;
-        Destroy(gameObject);
+        public float delay;
+        private WaitForSeconds waitForSeconds;
+
+        private void Start()
+        {
+            waitForSeconds = new WaitForSeconds(delay);
+            StartCoroutine(Co_delete());
+        }
+
+        IEnumerator Co_delete()
+        {
+            yield return waitForSeconds;
+            Destroy(gameObject);
+        }
     }
 }

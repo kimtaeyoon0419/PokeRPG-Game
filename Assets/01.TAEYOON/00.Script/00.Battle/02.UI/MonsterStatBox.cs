@@ -23,7 +23,16 @@ namespace PokeRPG.Battle.UI
         public WhoMonster whomonster;
         private float lerpspeed = 0.01f;
 
-        private void Update()
+        private void Start()
+        {
+            if (whomonster == WhoMonster.myMoster)
+            {
+                monsterHPbar.value = (float)BattleManager.instance.playerUnit.currentHP / BattleManager.instance.playerUnit.maxHP;
+                monsterExpbar.value = (float)BattleManager.instance.playerUnit.curExp / BattleManager.instance.playerUnit.maxExp;
+            }
+        }
+
+        private void LateUpdate()
         {
             SetStatBox();
         }
@@ -40,7 +49,15 @@ namespace PokeRPG.Battle.UI
 
                 monsterHPbar.value = Mathf.Lerp(monsterHPbar.value, (float)BattleManager.instance.playerUnit.currentHP / BattleManager.instance.playerUnit.maxHP, lerpspeed); // 체력바 초기화
 
-                monsterExpbar.value = Mathf.Lerp(monsterExpbar.value, (float)BattleManager.instance.playerUnit.curExp / BattleManager.instance.playerUnit.maxExp, lerpspeed); // 경험치바 초기화
+                if (monsterExpbar.value <= (float)BattleManager.instance.playerUnit.curExp / BattleManager.instance.playerUnit.maxExp)
+                {
+                    monsterExpbar.value = Mathf.Lerp(monsterExpbar.value, (float)BattleManager.instance.playerUnit.curExp / BattleManager.instance.playerUnit.maxExp, lerpspeed); // 경험치바 초기화
+                }
+                else
+                {
+                    monsterExpbar.value = 0;
+                    monsterExpbar.value = Mathf.Lerp(monsterExpbar.value, (float)BattleManager.instance.playerUnit.curExp / BattleManager.instance.playerUnit.maxExp, lerpspeed); // 경험치바 초기화
+                }
 
                 fill.color = gradient.Evaluate(monsterHPbar.normalizedValue);
             }

@@ -12,6 +12,7 @@ namespace PokeRPG.Battle
     using UnityEngine;
     using UnityEngine.UI;
     using TMPro;
+    using UnityEngine.SceneManagement;
 
     public class BattleManager : MonoBehaviour
     {
@@ -36,13 +37,14 @@ namespace PokeRPG.Battle
         public GameObject skillButton4; // 스킬 버튼
         public GameObject playerMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 플레이어 )
         public GameObject enemyMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 상대 )
+        public Image FadePanel;
+
 
         private void Awake()
         {
-            if(instance == null)
+            if (instance == null)
             {
                 instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -100,8 +102,10 @@ namespace PokeRPG.Battle
 
             if (isDead) // 만약 상대 몬스터가 죽었다면
             {
+                text.text = playerUnit.unitName + "은(는) " + enemyUnit.xpReward + " 경험치를 얻었다!";
+                yield return new WaitForSeconds(0.5f);
                 curBattleState = BattleState.Won; // 플레이어 승리 
-                playerUnit.curExp += enemyUnit.exp;
+                yield return playerUnit.StartCoroutine(playerUnit.LevelUp(enemyUnit.xpReward));
                 EndBattle(); // 배틀 종료
             }
             else // 안죽었다면
@@ -145,10 +149,12 @@ namespace PokeRPG.Battle
             if (curBattleState == BattleState.Won) // 플레이어가 이겼다면
             {
                 text.text = "야생의 " + enemyUnit.unitName + "을 무찔렀다!";
+                StartCoroutine(Co_Fade());
             }
             else if (curBattleState == BattleState.Lose) // 플레이어가 졌다면
             {
                 text.text = "김민결의 눈앞이 캄캄해졌다";
+                StartCoroutine(Co_Fade());
             }
         }
 
@@ -167,12 +173,46 @@ namespace PokeRPG.Battle
             if (curBattleState != BattleState.MyTurn) // 플레이어 턴이 아니라면 그냥 리턴
                 return;
 
-            skillButton1.SetActive (false); // 스킬 버튼 비활성화
-            skillButton2.SetActive (false); // 스킬 버튼 비활성화
-            skillButton3.SetActive (false); // 스킬 버튼 비활성화
-            skillButton4.SetActive (false); // 스킬 버튼 비활성화
+            skillButton1.SetActive(false); // 스킬 버튼 비활성화
+            skillButton2.SetActive(false); // 스킬 버튼 비활성화
+            skillButton3.SetActive(false); // 스킬 버튼 비활성화
+            skillButton4.SetActive(false); // 스킬 버튼 비활성화
             playerUnit.UseSkill(skillName);
             StartCoroutine(PlayerAttack()); // 플레이어 몬스터의 공격 코루틴 실행
+        }
+
+        public void LevelUpText()
+        {
+            text.text = playerUnit.unitName + "는 레벨 " + playerUnit.unitLevel + "로 올랐다!";
+        }
+
+        private IEnumerator Co_Fade()
+        {
+            float elspsedTime = 0f;
+            float fadedTime = 0.5f;
+            Color color = FadePanel.color;
+
+            yield return new WaitForSeconds(2f);
+
+            while (color.a < 1)
+            {
+                color.a += Time.deltaTime;
+                yield return null;
+                FadePanel.color = color;
+            }
+            SceneChange();
+        }
+
+        private void SceneChange()
+        {
+            if(playerUnit.unitLevel >= playerUnit.evolutionLevel)
+            {
+                SceneManager.LoadScene("EvolutionScene");
+            }
+            else
+            {
+                
+            }
         }
     }
 }
