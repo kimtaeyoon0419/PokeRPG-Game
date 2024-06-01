@@ -12,18 +12,32 @@ namespace PokeRPG.Feild.Player
     public class Player : MonoBehaviour
     {
         [Header("PlayerInfo")]
-        [SerializeField] private float moveSpeed = default;
+        [SerializeField] private float nomalSpeed = default;
+        [SerializeField] private float sprintSpeed = default;
 
+
+        private float moveSpeed = default;
         private Vector2 dir = Vector2.zero;
         private Rigidbody2D rb = null;
+        private Animator animator = null;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            animator = GetComponent<Animator>();
         }
         private void Update()
         {
             PlayerInput();
+
+            if(dir != Vector2.zero)
+            {
+                animator.SetBool("isMove", true);
+            }
+            else
+            {
+                animator.SetBool("isMove", false);
+            }
         }
 
         private void FixedUpdate()
@@ -49,7 +63,21 @@ namespace PokeRPG.Feild.Player
                 x = 0;
             }
 
+            if(Input.GetKey(KeyCode.LeftShift))
+            {
+                moveSpeed = sprintSpeed;
+                animator.SetTrigger("Sprint");
+            }
+            else
+            {
+                moveSpeed = nomalSpeed;
+                animator.SetTrigger("Walk");
+            }
+
             dir = new Vector2(x, y).normalized; //입력값의 따라 방향을 만듬
+
+            animator.SetFloat("Horizontal", x);
+            animator.SetFloat("Vertical", y);
         }
 
         private void PlayerMovement()
