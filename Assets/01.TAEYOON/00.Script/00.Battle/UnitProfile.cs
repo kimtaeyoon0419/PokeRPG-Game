@@ -67,6 +67,15 @@ namespace PokeRPG.Battle.Unit
             yield return new WaitForSeconds(0.5f);
         }
 
+        public void ClickLevelUp()
+        {
+            if(curExp >= maxExp)
+            {
+                curExp -= maxExp;
+                unitLevel++;
+            }
+        }
+
         public void Evolution()
         {
 

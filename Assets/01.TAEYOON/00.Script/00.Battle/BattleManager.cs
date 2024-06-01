@@ -13,6 +13,8 @@ namespace PokeRPG.Battle
     using UnityEngine.UI;
     using TMPro;
     using UnityEngine.SceneManagement;
+    using PokeRPG.Sound;
+    using UnityEditor.Rendering;
 
     public class BattleManager : MonoBehaviour
     {
@@ -28,6 +30,8 @@ namespace PokeRPG.Battle
         public UnitProfile enemyUnit { get; private set; }// 상대방 몬스터의 UnitProfile 코드
 
         public BattleState curBattleState { get; private set; } // 현재 배틀 턴
+        public bool playerWin;
+        public bool gameEnd;
 
         [Header("UI")]
         public TextMeshProUGUI text;
@@ -38,7 +42,9 @@ namespace PokeRPG.Battle
         public GameObject playerMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 플레이어 )
         public GameObject enemyMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 상대 )
         public Image FadePanel;
+        private float clickTextdelay = 0.2f;
 
+        
 
         private void Awake()
         {
@@ -49,6 +55,21 @@ namespace PokeRPG.Battle
             else
             {
                 Destroy(gameObject);
+            }
+        }
+        private void Update()
+        {
+            if (playerWin)
+            {
+                if(Input.GetMouseButtonDown(0) && clickTextdelay <= 0)
+                {
+                    WinText();
+                    clickTextdelay = 0.2f;
+                }
+            }
+            if(clickTextdelay >= 0)
+            {
+                clickTextdelay -= Time.deltaTime;
             }
         }
 
@@ -70,6 +91,7 @@ namespace PokeRPG.Battle
             GameObject enemyGo = Instantiate(enemyMonster, enemyBattleStation.position, Quaternion.identity); // 상대방 몬스터 스폰
             enemyGo.transform.rotation = Quaternion.Euler(0, -81, 0); // 서로 바라보기
             enemyUnit = enemyGo.GetComponent<UnitProfile>(); // 상대방 몬스터의 값 가져오기
+            SoundManager.instance.PlayMusic("BattleBGM_1");
 
             text.text = "야생의 " + enemyUnit.unitName + "이(가) 나타났다!";
 
@@ -102,11 +124,18 @@ namespace PokeRPG.Battle
 
             if (isDead) // 만약 상대 몬스터가 죽었다면
             {
+                SoundManager.instance.PlayMusic("Victory");
                 text.text = playerUnit.unitName + "은(는) " + enemyUnit.xpReward + " 경험치를 얻었다!";
                 yield return new WaitForSeconds(0.5f);
-                curBattleState = BattleState.Won; // 플레이어 승리 
-                yield return playerUnit.StartCoroutine(playerUnit.LevelUp(enemyUnit.xpReward));
-                EndBattle(); // 배틀 종료
+                playerWin = true;
+                curBattleState = BattleState.Won; // 플레이어 승리
+                //yield return playerUnit.StartCoroutine(playerUnit.LevelUp(enemyUnit.xpReward));
+                playerUnit.curExp += enemyUnit.xpReward;
+
+                //if (playerUnit.curExp <= playerUnit.maxExp)
+                //{
+                //    EndBattle(); // 배틀 종료
+                //}
             }
             else // 안죽었다면
             {
@@ -141,6 +170,29 @@ namespace PokeRPG.Battle
             {
                 PlayerTurn(); // 플레이어 행동 선택창
                 curBattleState = BattleState.MyTurn; // 플레이어 턴으로 교체
+            }
+        }
+
+        private void WinText()
+        {
+            if(playerUnit.curExp >= playerUnit.maxExp)
+            {
+                playerUnit.ClickLevelUp();
+                LevelUpText();
+                StartCoroutine(SoundManager.instance.PlaySfx("LevelUp!"));
+            }
+            else
+            {
+                if (gameEnd)
+                {
+                    StartCoroutine(Co_Fade());
+                    playerWin = false;
+                }
+                else
+                {
+                    text.text = "야생의 " + enemyUnit.unitName + "을 무찔렀다!";
+                    gameEnd = true;
+                }
             }
         }
 
@@ -188,11 +240,7 @@ namespace PokeRPG.Battle
 
         private IEnumerator Co_Fade()
         {
-            float elspsedTime = 0f;
-            float fadedTime = 0.5f;
             Color color = FadePanel.color;
-
-            yield return new WaitForSeconds(2f);
 
             while (color.a < 1)
             {
