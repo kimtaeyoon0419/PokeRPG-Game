@@ -15,6 +15,7 @@ namespace PokeRPG.Battle
     using UnityEngine.SceneManagement;
     using PokeRPG.Sound;
     using UnityEditor.Rendering;
+    using Unity.PlasticSCM.Editor.WebApi;
 
     public class BattleManager : MonoBehaviour
     {
@@ -29,9 +30,14 @@ namespace PokeRPG.Battle
         public UnitProfile playerUnit { get; private set; }// 플레이어 몬스터의 UnitProfile 코드
         public UnitProfile enemyUnit { get; private set; }// 상대방 몬스터의 UnitProfile 코드
 
+        private GameObject playerGo; // 현재 내 몬스터
+
         public BattleState curBattleState { get; private set; } // 현재 배틀 턴
         public bool playerWin;
         public bool gameEnd;
+
+        [Header("Evolution")]
+        public Transform evolutionStation;
 
         [Header("UI")]
         public TextMeshProUGUI text;
@@ -44,7 +50,7 @@ namespace PokeRPG.Battle
         public Image FadePanel;
         private float clickTextdelay = 0.2f;
 
-        
+
 
         private void Awake()
         {
@@ -61,13 +67,13 @@ namespace PokeRPG.Battle
         {
             if (playerWin)
             {
-                if(Input.GetMouseButtonDown(0) && clickTextdelay <= 0)
+                if (Input.GetMouseButtonDown(0) && clickTextdelay <= 0)
                 {
                     WinText();
                     clickTextdelay = 0.2f;
                 }
             }
-            if(clickTextdelay >= 0)
+            if (clickTextdelay >= 0)
             {
                 clickTextdelay -= Time.deltaTime;
             }
@@ -85,7 +91,7 @@ namespace PokeRPG.Battle
 
         IEnumerator SetupBattle()
         {
-            GameObject playerGo = Instantiate(myMonster, playerBattleStation.position, Quaternion.identity); // 플레이어 몬스터 스폰
+            playerGo = Instantiate(myMonster, playerBattleStation.position, Quaternion.identity); // 플레이어 몬스터 스폰
             playerGo.transform.rotation = Quaternion.Euler(0, 90, 0); // 서로 바라보기
             playerUnit = playerGo.GetComponent<UnitProfile>(); // 플레이어 몬스터의 값 가져오기
             GameObject enemyGo = Instantiate(enemyMonster, enemyBattleStation.position, Quaternion.identity); // 상대방 몬스터 스폰
@@ -175,9 +181,14 @@ namespace PokeRPG.Battle
 
         private void WinText()
         {
-            if(playerUnit.curExp >= playerUnit.maxExp)
+            if (playerUnit.curExp >= playerUnit.maxExp)
             {
-                playerUnit.ClickLevelUp();
+                bool evol = playerUnit.ClickLevelUp();
+                if(evol)
+                {
+                    EvolManager.instance.evolUnits.Add(playerUnit.gameObject);
+                }
+                
                 LevelUpText();
                 StartCoroutine(SoundManager.instance.PlaySfx("LevelUp!"));
             }
@@ -185,7 +196,7 @@ namespace PokeRPG.Battle
             {
                 if (gameEnd)
                 {
-                    StartCoroutine(Co_Fade());
+                    StartCoroutine(Co_FadeOut());
                     playerWin = false;
                 }
                 else
@@ -201,12 +212,12 @@ namespace PokeRPG.Battle
             if (curBattleState == BattleState.Won) // 플레이어가 이겼다면
             {
                 text.text = "야생의 " + enemyUnit.unitName + "을 무찔렀다!";
-                StartCoroutine(Co_Fade());
+                StartCoroutine(Co_FadeOut());
             }
             else if (curBattleState == BattleState.Lose) // 플레이어가 졌다면
             {
                 text.text = "김민결의 눈앞이 캄캄해졌다";
-                StartCoroutine(Co_Fade());
+                StartCoroutine(Co_FadeOut());
             }
         }
 
@@ -238,7 +249,7 @@ namespace PokeRPG.Battle
             text.text = playerUnit.unitName + "는 레벨 " + playerUnit.unitLevel + "로 올랐다!";
         }
 
-        private IEnumerator Co_Fade()
+        private IEnumerator Co_FadeOut()
         {
             Color color = FadePanel.color;
 
@@ -248,18 +259,31 @@ namespace PokeRPG.Battle
                 yield return null;
                 FadePanel.color = color;
             }
-            SceneChange();
+            SceneManager.LoadScene("EvolutionScene");
         }
+
+        private IEnumerator Co_FadeIn()
+        {
+            Color color = FadePanel.color;
+
+            while (color.a >= 0)
+            {
+                color.a -= Time.deltaTime;
+                yield return null;
+                FadePanel .color = color;
+            }
+        }
+
 
         private void SceneChange()
         {
-            if(playerUnit.unitLevel >= playerUnit.evolutionLevel)
+            if (playerUnit.unitLevel >= playerUnit.evolutionLevel)
             {
                 SceneManager.LoadScene("EvolutionScene");
             }
             else
             {
-                
+
             }
         }
     }

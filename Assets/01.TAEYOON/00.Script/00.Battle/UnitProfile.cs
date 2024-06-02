@@ -3,6 +3,7 @@ namespace PokeRPG.Battle.Unit
     // # System
     using System.Collections;
     using System.Collections.Generic;
+    using Unity.VisualScripting;
 
     // # Unity
     using UnityEngine;
@@ -67,12 +68,24 @@ namespace PokeRPG.Battle.Unit
             yield return new WaitForSeconds(0.5f);
         }
 
-        public void ClickLevelUp()
+        public bool ClickLevelUp()
         {
             if(curExp >= maxExp)
             {
                 curExp -= maxExp;
                 unitLevel++;
+                if(unitLevel >= evolutionLevel)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
