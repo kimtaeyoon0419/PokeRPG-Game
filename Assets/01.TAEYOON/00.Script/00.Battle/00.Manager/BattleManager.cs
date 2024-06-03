@@ -5,8 +5,6 @@ namespace PokeRPG.Battle
     // # System
     using System;
     using System.Collections;
-    using System.Collections.Generic;
-    using Unity.VisualScripting;
 
     // # Unity
     using UnityEngine;
@@ -14,8 +12,7 @@ namespace PokeRPG.Battle
     using TMPro;
     using UnityEngine.SceneManagement;
     using PokeRPG.Sound;
-    using UnityEditor.Rendering;
-    using Unity.PlasticSCM.Editor.WebApi;
+    using Cinemachine;
 
     public class BattleManager : MonoBehaviour
     {
@@ -50,7 +47,9 @@ namespace PokeRPG.Battle
         public Image FadePanel;
         private float clickTextdelay = 0.2f;
 
-
+        [Header("Cam")]
+        public GameObject vCam1;
+        public GameObject vCam2;
 
         private void Awake()
         {
@@ -63,6 +62,7 @@ namespace PokeRPG.Battle
                 Destroy(gameObject);
             }
         }
+
         private void Update()
         {
             if (playerWin)
@@ -259,7 +259,17 @@ namespace PokeRPG.Battle
                 yield return null;
                 FadePanel.color = color;
             }
-            SceneManager.LoadScene("EvolutionScene");
+
+            yield return new WaitForSeconds(0.5f);
+
+            if (EvolManager.instance.evolUnits != null)
+            {
+                vCam2.GetComponent<CinemachineVirtualCamera>().Priority = 11;
+                Debug.Log("Ω√¿€!");
+                yield return StartCoroutine(EvolManager.instance.EvolustionMonster());
+                yield return new WaitForSeconds(1.5f);
+                StartCoroutine(Co_FadeIn());
+            }
         }
 
         private IEnumerator Co_FadeIn()

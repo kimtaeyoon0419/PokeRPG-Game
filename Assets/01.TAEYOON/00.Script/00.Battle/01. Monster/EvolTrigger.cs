@@ -1,21 +1,21 @@
 // # System
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 // # Unity
 using UnityEngine;
 
 public class EvolTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Transform evolPos;
+    public TextMeshProUGUI evolText;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    //private IEnumerator Start()
+    //{
+    //    yield return StartCoroutine(FadeManager.instance.Co_FadeIn());
+
+    //    Debug.Log("∆‰¿ÃµÂ ≤Ù§º");
+    //    StartCoroutine(EvolManager.instance.EvolustionMonster(evolText, evolPos));
+    //}
 }
