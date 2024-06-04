@@ -44,7 +44,8 @@ namespace PokeRPG.Battle
         public GameObject skillButton4; // 스킬 버튼
         public GameObject playerMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 플레이어 )
         public GameObject enemyMonsterStatBoxObject; // 화면에 표시되는 상태창 ( 상대 )
-        public Image FadePanel;
+        public Image fadePanel;
+        public Image textPanel;
         private float clickTextdelay = 0.2f;
 
         [Header("Cam")]
@@ -87,6 +88,7 @@ namespace PokeRPG.Battle
             skillButton2.SetActive(false); // 스킬 버튼 비활성화
             skillButton3.SetActive(false); // 스킬 버튼 비활성화
             skillButton4.SetActive(false); // 스킬 버튼 비활성화
+            vCam2.gameObject.SetActive(false);
         }
 
         IEnumerator SetupBattle()
@@ -184,11 +186,11 @@ namespace PokeRPG.Battle
             if (playerUnit.curExp >= playerUnit.maxExp)
             {
                 bool evol = playerUnit.ClickLevelUp();
-                if(evol)
+                if (evol)
                 {
                     EvolManager.instance.evolUnits.Add(playerUnit.gameObject);
                 }
-                
+
                 LevelUpText();
                 StartCoroutine(SoundManager.instance.PlaySfx("LevelUp!"));
             }
@@ -249,38 +251,42 @@ namespace PokeRPG.Battle
             text.text = playerUnit.unitName + "는 레벨 " + playerUnit.unitLevel + "로 올랐다!";
         }
 
-        private IEnumerator Co_FadeOut()
+        public IEnumerator Co_FadeOut()
         {
-            Color color = FadePanel.color;
+            textPanel.gameObject.SetActive(false);
+            textPanel.gameObject.SetActive(false);
+            enemyMonsterStatBoxObject.gameObject.SetActive(false);
+            playerMonsterStatBoxObject.gameObject.SetActive(false);
+            Color color = fadePanel.color;
 
             while (color.a < 1)
             {
                 color.a += Time.deltaTime;
                 yield return null;
-                FadePanel.color = color;
+                fadePanel.color = color;
             }
 
             yield return new WaitForSeconds(0.5f);
 
             if (EvolManager.instance.evolUnits != null)
             {
-                vCam2.GetComponent<CinemachineVirtualCamera>().Priority = 11;
-                Debug.Log("시작!");
+                vCam2.gameObject.SetActive(true);
+
+                //yield return StartCoroutine(Co_FadeIn());
                 yield return StartCoroutine(EvolManager.instance.EvolustionMonster());
-                yield return new WaitForSeconds(1.5f);
-                StartCoroutine(Co_FadeIn());
+                yield return new WaitForSeconds(1f);
             }
         }
 
-        private IEnumerator Co_FadeIn()
+        public IEnumerator Co_FadeIn()
         {
-            Color color = FadePanel.color;
+            Color color = fadePanel.color;
 
             while (color.a >= 0)
             {
                 color.a -= Time.deltaTime;
                 yield return null;
-                FadePanel .color = color;
+                fadePanel.color = color;
             }
         }
 
