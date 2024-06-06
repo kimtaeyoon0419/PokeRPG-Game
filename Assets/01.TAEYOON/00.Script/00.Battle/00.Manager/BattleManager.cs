@@ -121,7 +121,7 @@ namespace PokeRPG.Battle
             text.text = playerUnit.unitName + "의 공격!";
             playerUnit.PlayAttackAnim(); // 플레이어 몬스터의 공격 애니메이션 실행
             //playerUnit.EnemyPosSkillAttack(enemyBattleStation); // 스킬 이펙트 소환
-            bool isDead = enemyUnit.TakeDamage(playerUnit.damage); // 상대 몬스터에게 공격하고 죽었는지 확인
+            bool isDead = enemyUnit.TakeDamage(playerUnit.damage, playerUnit, enemyUnit); // 상대 몬스터에게 공격하고 죽었는지 확인
             curBattleState = BattleState.EnemyTurn; // 상대방 턴으로 교체
             yield return new WaitForSeconds(0.5f); // 대기
             text.text = "공격이 적중했다!";
@@ -158,7 +158,7 @@ namespace PokeRPG.Battle
             text.text = enemyUnit.unitName + "의 공격!";
             enemyUnit.PlayAttackAnim(); // 상대방 몬스터의 공격 애니메이션 실행
             enemyUnit.EnemyPosSkillAttack(playerBattleStation); // 상대방 몬스터의 스킬 이펙트 소환
-            bool isDead = playerUnit.TakeDamage(enemyUnit.damage); // 플레이어에게 공격하고 죽었는지 확인
+            bool isDead = playerUnit.TakeDamage(enemyUnit.damage, enemyUnit, playerUnit); // 플레이어에게 공격하고 죽었는지 확인
             yield return new WaitForSeconds(0.5f); // 대기
             text.text = "공격이 적중했다!";
             //playerMonsterStatBox.SetStatBox();

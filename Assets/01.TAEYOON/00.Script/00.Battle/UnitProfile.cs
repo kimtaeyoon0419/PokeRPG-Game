@@ -25,18 +25,18 @@ namespace PokeRPG.Battle.Unit
         private Animator animator;
 
         [Header("Stat")]
-        public string unitName;
-        public int unitLevel;
-        public int damage;
-        public int maxHP;
-        public int currentHP;
-        public int maxExp;
-        public int curExp;
-        public int speed;
-        public int xpReward;
-        public int evolutionLevel = 15;
-
-
+        public string unitName;                                                         // 몬스터 이름
+        public int unitLevel;                                                               // 몬스터 레벨
+        public float damage;                                                                 // 몬스터 공격력
+        public float defence;
+        public float maxHP;                                                                   // 몬스터 최대체력
+        public float currentHP;                                                             // 몬스터 현재체력
+        public int maxExp;                                                                 // 몬스터 레벨업 최대 경험치
+        public int curExp;                                                                   // 몬스터 레벨업 현재 경험치
+        public int speed;                                                                     // 몬스터 스피드
+        public int xpReward;                                                              // 몬스터가 죽고 드랍하는 경험치
+        public int evolutionLevel = 15;                                                // 몬스터가 진화하는 레벨
+        public type monsterType;                                                            // 몬스터의 타입
 
         [Header("SkillEffect")]
         public GameObject tonadoEffect;
@@ -70,11 +70,11 @@ namespace PokeRPG.Battle.Unit
 
         public bool ClickLevelUp()
         {
-            if(curExp >= maxExp)
+            if (curExp >= maxExp)
             {
                 curExp -= maxExp;
                 unitLevel++;
-                if(unitLevel >= evolutionLevel)
+                if (unitLevel >= evolutionLevel)
                 {
                     return true;
                 }
@@ -94,10 +94,10 @@ namespace PokeRPG.Battle.Unit
 
         }
 
-        public bool TakeDamage(int dmg)
+        public bool TakeDamage(float dmg, UnitProfile attacker, UnitProfile defender)
         {
             animator.SetTrigger(hashTakeDamage);
-            currentHP -= dmg;
+            currentHP -= Attack.DamageCalc(attacker, defender);
 
             if (currentHP <= 0)
             {

@@ -18,10 +18,11 @@ public class EvolManager : MonoBehaviour
     public GameObject evolLook;
     public GameObject evolSphere;
     public TextMeshProUGUI evolText;
+    public GameObject evolMonster;
 
     private void Awake()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
@@ -36,9 +37,7 @@ public class EvolManager : MonoBehaviour
         GameObject unitMonster = Instantiate(evolUnits[0].gameObject, evolPos.position, Quaternion.identity);
         UnitProfile unitProfile = evolUnits[0].GetComponent<UnitProfile>();
         unitMonster.transform.LookAt(evolLook.transform);
-        float rotateTime = 10f;
-        float turnspeed = 1f;
-        Vector3 originaScale = evolSphere.transform.localScale;
+
 
         //BattleManager.instance.text.gameObject.SetActive(false);
         //BattleManager.instance.textPanel.gameObject.SetActive(false);
@@ -67,17 +66,5 @@ public class EvolManager : MonoBehaviour
 
         BattleManager.instance.textPanel.gameObject.SetActive(false);
 
-        evolSphere.SetActive(true);
-
-        while (rotateTime > 0)
-        {
-            Debug.Log("È¸ÀüÁß");
-            evolSphere.transform.localScale = originaScale * Time.deltaTime;
-            unitMonster.transform.Rotate(new Vector3(0, 1, 0) * turnspeed * Time.deltaTime);
-            rotateTime -= Time.deltaTime;
-            turnspeed += 0.5f;
-            yield return null;
-        }
-        unitMonster.transform.LookAt(evolLook.transform);
     }
 }
