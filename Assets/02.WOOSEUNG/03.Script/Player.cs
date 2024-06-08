@@ -1,5 +1,6 @@
 namespace PokeRPG.Feild.Player
 {
+    using PokeRPG.Manager;
 
     // # System
     using System.Collections;
