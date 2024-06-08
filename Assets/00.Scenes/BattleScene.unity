@@ -5060,6 +5060,7 @@ MonoBehaviour:
   evolLook: {fileID: 1492170664}
   evolSphere: {fileID: 583922861}
   evolText: {fileID: 633754589}
+  evolMonster: {fileID: 4114961155869035969, guid: e4a656bb6b512b946815440d8b579225, type: 3}
 --- !u!4 &1679189534
 Transform:
   m_ObjectHideFlags: 0
